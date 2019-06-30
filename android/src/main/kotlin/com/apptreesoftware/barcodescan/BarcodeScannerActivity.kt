@@ -7,9 +7,8 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import android.view.Menu
-import android.view.MenuItem
 import com.google.zxing.Result
+import com.yourcompany.barcodescan.R
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 
 
@@ -19,8 +18,6 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
 
     companion object {
         val REQUEST_TAKE_PHOTO_CAMERA_PERMISSION = 100
-        val TOGGLE_FLASH = 200
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,31 +25,14 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
         title = ""
         scannerView = ZXingScannerView(this)
         scannerView.setAutoFocus(true)
+        scannerView.setBorderColor(getResources().getColor(R.color.main_color))
+        scannerView.setBorderLineLength(getResources().getInteger(R.integer.border_length))
+        scannerView.setLaserEnabled(false)
+        scannerView.setSquareViewFinder(true)
+        scannerView.setFadingEdgeLength(getResources().getInteger(R.integer.fading_length))
         // this paramter will make your HUAWEI phone works great!
         scannerView.setAspectTolerance(0.5f)
         setContentView(scannerView)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if (scannerView.flash) {
-            val item = menu.add(0,
-                    TOGGLE_FLASH, 0, "Flash Off")
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        } else {
-            val item = menu.add(0,
-                    TOGGLE_FLASH, 0, "Flash On")
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        }
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == TOGGLE_FLASH) {
-            scannerView.flash = !scannerView.flash
-            this.invalidateOptionsMenu()
-            return true
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onResume() {
