@@ -22,7 +22,6 @@
   CGContextRef context = UIGraphicsGetCurrentContext();
   
   UIColor * overlayColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.55];
-  UIColor *scanLineColor = UIColor.redColor;
   
   CGContextSetFillColorWithColor(context, overlayColor.CGColor);
   CGContextFillRect(context, self.bounds);
@@ -33,12 +32,8 @@
   [[UIColor clearColor] setFill];
   UIRectFill(holeRectIntersection);
   
-  // draw a horizontal line over the middle
-  CGRect lineRect = [self scanLineRect];
-  _line.frame = lineRect;
-  
   // drw the green corners
-  CGFloat cornerSize = 30;
+  CGFloat cornerSize = 16;
   UIBezierPath *path = [UIBezierPath bezierPath];
   //top left corner
   [path moveToPoint:CGPointMake(holeRect.origin.x, holeRect.origin.y + cornerSize)];
@@ -62,31 +57,22 @@
   [path addLineToPoint:CGPointMake(holeRect.origin.x, bottomHoleY)];
   [path addLineToPoint:CGPointMake(holeRect.origin.x, bottomHoleY - cornerSize)];
   
-  path.lineWidth = 2;
-  [[UIColor greenColor] setStroke];
+  path.lineWidth = 3;
+  [[UIColor colorWithRed:1.00 green:0.31 blue:0.31 alpha:1.0] setStroke];
   [path stroke];
   
 }
   
   - (void)startAnimating {
-    CABasicAnimation *flash = [CABasicAnimation animationWithKeyPath:@"opacity"];
-    flash.fromValue = [NSNumber numberWithFloat:0.0];
-    flash.toValue = [NSNumber numberWithFloat:1.0];
-    flash.duration = 0.25;
-    flash.autoreverses = YES;
-    flash.repeatCount = HUGE_VALF;
-    [_line.layer addAnimation:flash forKey:@"flashAnimation"];
   }
   
   - (void)stopAnimating {
-    [self.layer removeAnimationForKey:@"flashAnimation"];
   }
   
   - (CGRect)scanRect {
     CGRect rect = self.frame;
-    CGFloat heightMultiplier = 3.0/4.0; // 4:3 aspect ratio
-    CGFloat scanRectWidth = rect.size.width * 0.8f;
-    CGFloat scanRectHeight = scanRectWidth * heightMultiplier;
+    CGFloat scanRectWidth = rect.size.width * 0.75f;
+    CGFloat scanRectHeight = scanRectWidth;
     CGFloat scanRectOriginX = (rect.size.width / 2) - (scanRectWidth / 2);
     CGFloat scanRectOriginY = (rect.size.height / 2) - (scanRectHeight / 2);
     return CGRectMake(scanRectOriginX, scanRectOriginY, scanRectWidth, scanRectHeight);
